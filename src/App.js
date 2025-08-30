@@ -18,7 +18,7 @@ function App() {
 
   const AddTask = () => {
     if (task.trim() !== "") {
-      setTasks([...tasks, { id: crypto.randomUUID, name: task.trim(), desc: desc.trim(), isComplete: false }]);
+      setTasks([...tasks, { id: (crypto?.randomUUID?.() || String(Date.now())), name: task.trim(), desc: desc.trim(), isComplete: false }]);
       setTask("");
       setDesc("");
     }
@@ -85,7 +85,7 @@ function App() {
 
 
       {/* Add Task Form */}
-      
+      {!editingTask && (
         <div className="add-task-container">
           <label className="task-title-label">
             Task Title
@@ -117,7 +117,8 @@ function App() {
             </button>
           </div>
         </div>
-
+      )}
+        
       <div className="task-container">
 
         {tasks.length !== 0 && (
@@ -128,67 +129,73 @@ function App() {
           </div>
         )}
 
-        {/* Single source of truth for list & empty states */}
-        {visibleTasks.length === 0 ? (
-        <div className="no-task-container">
-          <h3 className="no-task-msg">
-            {filter === "completed"
-              ? "No completed tasks yet"
-              : filter === "active"
-              ? "No active tasks"
-              : "No tasks yet"}
-          </h3>
-          {(filter === "all" || filter === "active") && (
-            <p className="no-task-subtitle">Create some tasks now</p>
-          )}
-        </div>
-      ) : (
-        visibleTasks.map((item) =>
-          editingTask === item.id ? null : (
-            <div key={item.id} className="task-card">
-              <input
-                type="checkbox"
-                checked={item.isComplete}
-                onChange={() => MarkAsComplete(item.id)}
-              />
+        {/* List or empty state */}
+      {editingTask === null ? (
+        visibleTasks.length === 0 ? (
+          <div className="no-task-container">
+            <h3 className="no-task-msg">
+              {filter === "completed"
+                ? "No completed tasks yet"
+                : filter === "active"
+                ? "No active tasks"
+                : "No tasks yet"}
+            </h3>
+            {(filter === "all" || filter === "active") && (
+              <p className="no-task-subtitle">Create some tasks now</p>
+            )}
+          </div>
+          ) : (
+            visibleTasks.map((item) => (
+              <div key={item.id} className="task-card">
+                <input
+                  type="checkbox"
+                  checked={item.isComplete}
+                  onChange={() => MarkAsComplete(item.id)}
+                />
 
               <span
                 style={{
                   textDecoration: item.isComplete ? "line-through" : "none",
-                  textDecorationColor: item.isComplete ? "red" : "none",
+                  textDecorationColor: item.isComplete ? "pink" : "none",
                   textDecorationThickness: item.isComplete ? "4px" : "initial",
                 }}
               >
                 {item.name} {item.desc && <em>— {item.desc}</em>}
               </span>
-
-              <div className="action-btns-container">
-                <button onClick={() => EditTask(item.id)}>
-                  <FiEdit3 />
-                </button>
-                <button onClick={() => DeleteTask(item.id)}>
-                  <FiTrash />
-                </button>
+                <div className="action-btns-container">
+                  <button className="edit-btn" onClick={() => EditTask(item.id)}>
+                    <FiEdit3 />
+                  </button>
+                  <button className="del-btn" onClick={() => DeleteTask(item.id)}>
+                    <FiTrash />
+                  </button>
+                </div>
               </div>
-            </div>
+            ))
           )
-        )
-      )}
+        ) : null}
+
 
       {/* Edit panel (for the selected task only) */}
       {editingTask !== null && (
         <div className="edit-task-container">
+          <label className="task-title-label">
+            New Title
+          </label>
           <input
             type="text"
             value={taskToEdit}
             onChange={(e) => setTaskToEdit(e.target.value)}
           />
+          <label className="task-desc-label">
+            New Description (optional)
+          </label>
           <input
             type="text"
             value={descToEdit}
             onChange={(e) => setDescToEdit(e.target.value)}
           />
-          <button className="save-btn" onClick={() => SaveTask(editingTask)}>Save</button>
+          <button className="save-btn" onClick={() => SaveTask(editingTask)} disabled={taskToEdit.trim().length === 0}>Save</button>
         </div>
       )}
     </div>
