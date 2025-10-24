@@ -156,7 +156,7 @@ function App() {
               <span
                 style={{
                   textDecoration: item.isComplete ? "line-through" : "none",
-                  textDecorationColor: item.isComplete ? "pink" : "none",
+                  textDecorationColor: item.isComplete ? "#1d31e4ff" : "none",
                   textDecorationThickness: item.isComplete ? "4px" : "initial",
                 }}
               >
