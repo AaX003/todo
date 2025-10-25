@@ -8,10 +8,10 @@
   --ring: #3b82f6;
   --border: #e5e7eb;
 
-  --accent: #3b82f6;       /* primary */
-  --accent-2: #10b981;     /* success */
-  --accent-3: #f59e0b;     /* warning */
-  --accent-4: #ef4444;     /* danger */
+  --accent: #3b82f6;       
+  --accent-2: #10b981;     
+  --accent-3: #f59e0b;     
+  --accent-4: #ef4444;     
 }
 @media (prefers-color-scheme: dark){
   :root{
