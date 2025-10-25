@@ -58,7 +58,7 @@ function App() {
   const completedTasks = tasks.filter(t => t.isComplete);
 
   const active = activeTasks.length;
-  const completed = completedTasks.length; // count (was array before)
+  const completed = completedTasks.length; 
 
   const visibleTasks =
     filter === "completed" ? completedTasks :
@@ -79,7 +79,7 @@ function App() {
           <p>{active} Active</p>
         </div>
         <div className="completed-tasks">
-          <p>{completed} Completed</p> {/* fixed: show count, not array */}
+          <p>{completed} Completed</p> 
         </div>
       </div>
 
